@@ -1,0 +1,46 @@
+name: RackNerd Price Tracker
+
+on:
+  schedule:
+    # 每天 UTC 02:00 执行 (即北京时间 10:00)
+    - cron: '0 2 * * *'
+  workflow_dispatch: # 支持网页端手动点击触发
+
+permissions:
+  contents: write
+
+jobs:
+  track-racknerd:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 2. 安装 Python 环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 3. 安装依赖
+        run: |
+          pip install -r requirements.txt
+
+      - name: 4. 执行比价与推送
+        env:
+          SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
+        run: |
+          python tracker.py
+
+      - name: 5. 提交数据与走势图
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add price_history.csv price_trend.png
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto: Update RackNerd lowest price [$(date +'%Y-%m-%d')]"
+            git push
+          else
+            echo "今日数据无变动，跳过提交。"
+          fi
