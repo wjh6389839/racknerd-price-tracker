@@ -26,6 +26,7 @@ jobs:
       - name: 3. 安装依赖
         run: |
           pip install -r requirements.txt
+          pip install requests matplotlib pandas curl_cffi
 
       - name: 4. 执行比价与推送
         env:
