@@ -26,11 +26,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests matplotlib pandas curl_cffi beautifulsoup4
 
-      - name: 3.5 挂载 Cloudflare WARP 切换纯净 IP (防机房IP被封)
-        uses: Cloudflare/warp-action@v1
-        with:
-          version: latest
-
       - name: 4. 执行比价与推送
         env:
           SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
