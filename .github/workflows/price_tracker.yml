@@ -3,7 +3,7 @@ name: RackNerd Price Tracker
 on:
   schedule:
     # 每天定时运行（UTC时间 00:30 和 12:30，对应北京时间 08:30 和 20:30）
-    - cron: '0 2 * * *'
+    - cron: '4 2 * * *'
   workflow_dispatch: # 允许在 Actions 页面手动点击运行
 
 permissions:
